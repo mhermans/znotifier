@@ -9,25 +9,14 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
+from ConfigParser import SafeConfigParser
+
+
 # SET GLOBAL VARIABLES
 # ====================
 
-SMTP_HOST = 'smtp.webfaction.com'
-SMTP_LOGIN = ""
-SMTP_PWD = ""
-
-# WIN library
-#library_id = '297624'
-#library_type = 'group'
-#api_key = 'Gl1kS04LvCAQ4fCcDHWGxKDh'
-
-LIBRARY_ID = '313564'
-LIBRARY_TYPE = 'group'
-API_KEY = 'p3dRgO8Pe85xdFRHWfhNvfrw'
-
-EMAIL_FROM = "maarten@mhermans.net"
-#EMAIL_TO = "Laurianne.Terlinden@kuleuven.be"
-EMAIL_TO = "maarten.hermans@kuleuven.be"
+parser = SafeConfigParser()
+parser.read('settings.ini')
 
 
 # FETCH ALL ZOTERO TOP ITEMS
@@ -35,7 +24,8 @@ EMAIL_TO = "maarten.hermans@kuleuven.be"
 
 # since looks at modification, not addition
 #items = zot.top(sort='dateModified', direction='desc', since=60)
-zot = zotero.Zotero(library_id, library_type, api_key)
+zot = zotero.Zotero(parser.get('zotero', 'LIBRARY_ID'), 
+	'group', parser.get('zotero', 'API_KEY'))
 items = zot.top(sort='dateModified', direction='desc')
 citations = zot.top(sort='dateModified', direction='desc', content='citation')
 
@@ -66,9 +56,10 @@ html_str = """<html>
                     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
                 <head>
                 <body> 
-                    <p>Documents added to the SESAME group library since %s:</p>
+		    <p>Dear member of the SESAME-consortium</p>
+                    <p>The following documents were added to the SESAME group library since %s (the past week):</p>
                     <ul>%s</ul>
-		    <p>This email was generated automatically. Please send comments to <a href="mailto:laurianne.terlinden@kuleuven.be">Laurianne.Terlinden@kuleuven.be</a>.</p>
+		    <p><em>This email was generated automatically. Please send comments to <a href="mailto:laurianne.terlinden@kuleuven.be">Laurianne.Terlinden@kuleuven.be</a>.</em></p>
                 </body>
             </html>""" % (prev_datetime, filtered_citations)
 
@@ -85,8 +76,8 @@ with open('out.html', 'w') as f:
 # Create message container - the correct MIME type is multipart/alternative.
 msg = MIMEMultipart('alternative')
 msg['Subject'] = "Recent additions to the SESAME group library"
-msg['From'] = EMAIL_FROM
-msg['To'] = EMAIL_TO 
+msg['From'] = parser.get('email', 'EMAIL_FROM')
+msg['To'] = parser.get('email', 'EMAIL_TO')
 
 # Record the MIME types of both parts - text/plain and text/html.
 part = MIMEText(html_str.encode('utf-8'), 'html')
@@ -94,9 +85,9 @@ msg.attach(part)
 
 
 # Send the message via local SMTP server.
-s = smtplib.SMTP(SMTP_HOST)
-s.login(SMTP_LOGIN, SMTP_PWD)
+s = smtplib.SMTP(parser.get('smtp', 'SMTP_HOST'))
+s.login(parser.get('smtp', 'SMTP_LOGIN'), parser.get('smtp', 'SMTP_PWD'))
 # sendmail function takes 3 arguments: sender's address, recipient's address
 # and message to send - here it is sent as one string.
-s.sendmail(me, you, msg.as_string())
+s.sendmail(parser.get('email', 'EMAIL_FROM'), parser.get('email', 'EMAIL_TO'), msg.as_string())
 s.quit()

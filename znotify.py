@@ -2,7 +2,7 @@
 # coding: utf-8
 
 from pyzotero import zotero
-from datetime import datetime
+from datetime import datetime, timedelta
 from lxml import etree, html
 
 import smtplib
@@ -16,7 +16,7 @@ from ConfigParser import SafeConfigParser
 # ====================
 
 parser = SafeConfigParser()
-parser.read('settings.ini')
+parser.read('/home/mhermans/znotifier/settings.ini')
 
 
 # FETCH ALL ZOTERO TOP ITEMS
@@ -31,7 +31,8 @@ citations = zot.top(sort='dateModified', direction='desc', content='citation')
 
 
 # read/get previous generation time
-prev_datetime = datetime.strptime(u'2014-12-11T11:11:33Z', "%Y-%m-%dT%H:%M:%SZ")
+#prev_datetime = datetime.strptime(u'2014-12-11T11:11:33Z', "%Y-%m-%dT%H:%M:%SZ")
+prev_datetime = datetime.today() - timedelta(days=7)
 
 # select added since from previous data
 filtered_items = [item for item in items if 
@@ -61,7 +62,7 @@ html_str = """<html>
                     <ul>%s</ul>
 		    <p><em>This email was generated automatically. Please send comments to <a href="mailto:laurianne.terlinden@kuleuven.be">Laurianne.Terlinden@kuleuven.be</a>.</em></p>
                 </body>
-            </html>""" % (prev_datetime, filtered_citations)
+            </html>""" % (prev_datetime.date(), filtered_citations)
 
 
 document_root = html.fromstring(html_str)

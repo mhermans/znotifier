@@ -79,6 +79,7 @@ msg = MIMEMultipart('alternative')
 msg['Subject'] = "Recent additions to the SESAME group library"
 msg['From'] = parser.get('email', 'EMAIL_FROM')
 msg['To'] = parser.get('email', 'EMAIL_TO')
+msg['Cc'] = parser.get('email', 'EMAIL_CC')
 
 # Record the MIME types of both parts - text/plain and text/html.
 part = MIMEText(html_str.encode('utf-8'), 'html')

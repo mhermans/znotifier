@@ -1,3 +1,2 @@
 # (0-59)  (0-23)     (1-31)    (1-12 or Jan-Dec)  (0-6 or Sun-Sat)                
-#44 23 * * Sun /home/mhermans/.virtualenvs/testenv/bin/python --version >/tmp/qqdate
 59 0 * * 1 /home/mhermans/.virtualenvs/testenv/bin/python /home/mhermans/znotifier/znotify.py 2> /tmp/znoterror.txt

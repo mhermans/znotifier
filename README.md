@@ -1,4 +1,4 @@
-**znotifier** -  Python script to send automated emails with recent additions to Zotero group libraries.
+**znotifier** -  Python script to send automated emails with recent additions to a Zotero group library.
 
 # Requirements
 
@@ -10,9 +10,9 @@
 
 * Install [pyzotero](https://github.com/urschrei/pyzotero): `pip install pyzotero`.
 * Modify the path to `settings.ini` in `znotify.py` (use absolute paths when running cronjobs).
-* Generate a API key for the Zotero group library.
+* Generate a API key for the Zotero group library through the Zotero.com web interface.
 * Modify `settings.ini` itself: SMTP-settings, Zotero credentials, generation-interval in days (this needs to be the same interval as in the cronjob).
-* Modify the `cronjob` example. Use absolute paths, and if you use `virtualenv`, remeber to add the correct Python interpreter.
+* Modify the `cronjob` example. Use absolute paths, and if you use `virtualenv`, remember to add the correct Python interpreter.
 * Add the cronjob to `crontab` using `crontab cronjob`.
 
 Change the basic HTML template in `znotify.py` to match your requirements.

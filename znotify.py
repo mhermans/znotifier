@@ -3,7 +3,6 @@
 
 from pyzotero import zotero
 from datetime import datetime, timedelta
-from lxml import etree, html
 
 import smtplib
 from email.mime.multipart import MIMEMultipart
@@ -75,10 +74,13 @@ html_str = """
               parser.get('email', 'EMAIL_FROM'),
               parser.get('email', 'EMAIL_FROM'))
 
-# write out html message
-document_root = html.fromstring(html_str)
-with open('out.html', 'w') as f:
-    f.write(etree.tostring(document_root, encoding='utf-8', pretty_print=True))
+# optional: write out html message (local archive)
+# required: pip install lxml
+#
+# from lxml import etree, html
+# document_root = html.fromstring(html_str)
+# with open('out.html', 'w') as f:
+#    f.write(etree.tostring(document_root, encoding='utf-8', pretty_print=True))
 
 
 # CREATE AND SEND HTML MESSAGE

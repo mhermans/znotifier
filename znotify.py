@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3.8
 # coding: utf-8
 
 from pyzotero import zotero
@@ -8,14 +8,14 @@ import sys
 import logging
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from ConfigParser import SafeConfigParser
+from configparser import ConfigParser
 
 SETTINGSFILE = '/home/mhermans/znotifier/settings.ini'
 
 # SET GLOBAL VARIABLES
 # ====================
 
-parser = SafeConfigParser()
+parser = ConfigParser()
 parser.read(SETTINGSFILE)
 
 
@@ -129,7 +129,8 @@ msg['To'] = ', '.join(recipients)
 #msg['Cc'] = parser.get('email', 'EMAIL_CC')
 
 # Record the MIME type as text/html.
-part = MIMEText(html_str.encode('utf-8'), 'html')
+#part = MIMEText(html_str.encode('utf-8'), 'html')
+part = MIMEText(html_str, 'html')
 msg.attach(part)
 
 # Send the message via (local) SMTP server.
